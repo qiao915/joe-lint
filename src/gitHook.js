@@ -1,5 +1,6 @@
-import { writeFileSync, readFileSync, existsSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, chmodSync } from 'fs';
 import { resolve } from 'path';
+import { execSync } from 'child_process';
 import { getConfig } from './config.js';
 
 /**
@@ -40,7 +41,6 @@ async function checkAndInstallHusky() {
     // 检查是否已安装husky
     if (!packageJson.devDependencies || !packageJson.devDependencies.husky) {
       console.log('正在安装husky...');
-      const { execSync } = require('child_process');
       execSync('npm install husky --save-dev', { stdio: 'inherit' });
       
       // 启用husky
@@ -64,7 +64,6 @@ async function configureHusky(config) {
   const hooksDir = resolve(process.cwd(), '.husky');
   
   // 创建husky目录
-  const { mkdirSync } = require('fs');
   if (!existsSync(hooksDir)) {
     mkdirSync(hooksDir, { recursive: true });
   }
@@ -74,7 +73,6 @@ async function configureHusky(config) {
     const preCommitPath = resolve(hooksDir, 'pre-commit');
     writeFileSync(preCommitPath, '#!/bin/sh\n. "$(dirname "$0")/_/husky.sh"\n\njoe-lint --staged\n', 'utf8');
     // 设置可执行权限
-    const { chmodSync } = require('fs');
     chmodSync(preCommitPath, '755');
   }
   
@@ -83,7 +81,6 @@ async function configureHusky(config) {
     const commitMsgPath = resolve(hooksDir, 'commit-msg');
     writeFileSync(commitMsgPath, '#!/bin/sh\n. "$(dirname "$0")/_/husky.sh"\n\njoe-lint --commitlint "$1"\n', 'utf8');
     // 设置可执行权限
-    const { chmodSync } = require('fs');
     chmodSync(commitMsgPath, '755');
   }
 }
@@ -102,7 +99,6 @@ export async function checkCommitMessage(commitMsgPath, options = {}) {
   }
   
   try {
-    const { readFileSync } = require('fs');
     const commitMessage = readFileSync(commitMsgPath, 'utf8').trim();
     
     const { lint } = await import('@commitlint/lint');

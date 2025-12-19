@@ -1,0 +1,269 @@
+{
+  "fileTypes": [
+    "html", "css", "js", "ts", "vue", "react", "ejs",
+    "jsx", "tsx", "less", "scss", "md"
+  ],
+  "linters": {
+    "js": {
+      "enabled": true,
+      "tool": "eslint",
+      "config": {
+        "extends": ["eslint:recommended"],
+        "parserOptions": {
+          "ecmaVersion": "latest",
+          "sourceType": "module"
+        },
+        "env": {
+          "node": true,
+          "browser": true,
+          "es2022": true
+        },
+        "globals": {
+          "console": true,
+          "require": true,
+          "module": true,
+          "__dirname": true,
+          "__filename": true,
+          "process": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "Buffer": true
+        }
+      }
+    },
+    "ts": {
+      "enabled": true,
+      "tool": "eslint",
+      "config": {
+        "extends": ["eslint:recommended"],
+        "parser": "@typescript-eslint/parser",
+        "plugins": ["@typescript-eslint"],
+        "env": {
+          "node": true,
+          "browser": true,
+          "es2022": true
+        },
+        "globals": {
+          "console": true,
+          "require": true,
+          "module": true,
+          "__dirname": true,
+          "__filename": true,
+          "process": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "Buffer": true
+        },
+        "rules": {
+          "@typescript-eslint/no-unused-vars": "error",
+          "@typescript-eslint/explicit-function-return-type": "error"
+        }
+      }
+    },
+    "jsx": {
+      "enabled": true,
+      "tool": "eslint",
+      "config": {
+        "extends": ["eslint:recommended", "plugin:react/recommended"],
+        "parserOptions": {
+          "ecmaFeatures": {
+            "jsx": true
+          }
+        },
+        "env": {
+          "node": true,
+          "browser": true,
+          "es2022": true
+        },
+        "globals": {
+          "console": true,
+          "require": true,
+          "module": true,
+          "__dirname": true,
+          "__filename": true,
+          "process": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "Buffer": true
+        },
+        "plugins": ["react"]
+      }
+    },
+    "tsx": {
+      "enabled": true,
+      "tool": "eslint",
+      "config": {
+        "extends": ["eslint:recommended", "@typescript-eslint/recommended", "plugin:react/recommended"],
+        "parser": "@typescript-eslint/parser",
+        "plugins": ["@typescript-eslint", "react"],
+        "env": {
+          "node": true,
+          "browser": true,
+          "es2022": true
+        },
+        "globals": {
+          "console": true,
+          "require": true,
+          "module": true,
+          "__dirname": true,
+          "__filename": true,
+          "process": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "Buffer": true
+        }
+      }
+    },
+    "css": {
+      "enabled": true,
+      "tool": "stylelint",
+      "config": {
+        "extends": ["stylelint-config-standard"]
+      }
+    },
+    "less": {
+      "enabled": true,
+      "tool": "stylelint",
+      "config": {
+        "extends": ["stylelint-config-standard"],
+        "customSyntax": "postcss-less"
+      }
+    },
+    "scss": {
+      "enabled": true,
+      "tool": "stylelint",
+      "config": {
+        "extends": ["stylelint-config-standard-scss"]
+      }
+    },
+    "html": {
+      "enabled": true,
+      "tool": "eslint",
+      "config": {
+        "extends": ["eslint:recommended"],
+        "plugins": ["html"],
+        "env": {
+          "node": true,
+          "browser": true,
+          "es2022": true
+        },
+        "globals": {
+          "console": true,
+          "require": true,
+          "module": true,
+          "__dirname": true,
+          "__filename": true,
+          "process": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "Buffer": true
+        }
+      }
+    },
+    "vue": {
+      "enabled": true,
+      "tool": "eslint",
+      "config": {
+        "extends": ["eslint:recommended"],
+        "parser": "vue-eslint-parser",
+        "plugins": ["vue"],
+        "env": {
+          "node": true,
+          "browser": true,
+          "es2022": true
+        },
+        "globals": {
+          "console": true,
+          "require": true,
+          "module": true,
+          "__dirname": true,
+          "__filename": true,
+          "process": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "Buffer": true
+        },
+        "rules": {
+          "vue/no-unused-vars": "error",
+          "vue/no-duplicate-attributes": "error",
+          "vue/require-v-for-key": "error"
+        }
+      }
+    },
+    "ejs": {
+      "enabled": true,
+      "tool": "eslint",
+      "config": {
+        "extends": ["eslint:recommended"],
+        "plugins": ["ejs"],
+        "env": {
+          "node": true,
+          "browser": true,
+          "es2022": true
+        },
+        "globals": {
+          "console": true,
+          "require": true,
+          "module": true,
+          "__dirname": true,
+          "__filename": true,
+          "process": true,
+          "setTimeout": true,
+          "clearTimeout": true,
+          "setInterval": true,
+          "clearInterval": true,
+          "Buffer": true
+        }
+      }
+    },
+    "md": {
+      "enabled": true,
+      "tool": "markdownlint",
+      "config": {
+        "default": true,
+        "MD001": false,
+        "MD003": false,
+        "MD010": false,
+        "MD024": false
+      }
+    }
+  },
+  "commitlint": {
+    "enabled": true,
+    "config": {
+      "extends": ["@commitlint/config-conventional"]
+    }
+  },
+  "ignore": [
+    "node_modules",
+    "dist",
+    "build",
+    ".git",
+    "*.log",
+    "package-lock.json",
+    "yarn.lock"
+  ],
+  "output": {
+    "format": "markdown",
+    "file": "joe-lint-result.md"
+  },
+  "gitHook": {
+    "enabled": true,
+    "hooks": {
+      "pre-commit": "lint",
+      "commit-msg": "commitlint"
+    }
+  }
+}

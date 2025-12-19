@@ -33,6 +33,7 @@ lerna-debug.log*
 .env.production.local
 
 # Testing
+test-project/
 coverage/
 .nyc_output/
 
@@ -44,3 +45,6 @@ coverage/
 # Lint reports
 joe-lint-result.md
 *.lint.md
+
+test/
+joe-lint-result-*.md

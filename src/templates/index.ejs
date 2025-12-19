@@ -1,0 +1,77 @@
+[toc]
+
+# Code Quality Check Report
+
+## Summary
+- **Generated at:** <%= new Date().getFullYear() %>/<%= String(new Date().getMonth() + 1).padStart(2, '0') %>/<%= String(new Date().getDate()).padStart(2, '0') %> <%= String(new Date().getHours()).padStart(2, '0') %>:<%= String(new Date().getMinutes()).padStart(2, '0') %>:<%= String(new Date().getSeconds()).padStart(2, '0') %>
+- **Target Path:** <%= targetPath || process.cwd() %>
+- **Total Issues:** <%= summary.totalIssues %>
+- **Files Involved:** <%= summary.filesInvolved %>
+- **Error Count:** <%= summary.errorCount %>
+- **Warning Count:** <%= summary.warningCount %>
+
+[跳转到中文报告](#编码质量检查报告)
+
+<% for (const [file, errors] of Object.entries(errorsByFile)) { %>
+## File: <%= file %>
+- **Error Count:** <%= errors.filter(e => e.severity === 2).length %>
+- **Warning Count:** <%= errors.filter(e => e.severity === 1).length %>
+
+### Problem Details
+<% if (errors.length > 50) { %>
+⚠️ This file has too many issues (<%= errors.length %>). Showing first 50 issues only.
+<% } %>
+<% const displayErrors = errors.slice(0, 50); %>
+<% for (const error of displayErrors) { %>
+- **Line <%= error.line %>, Column <%= error.column %>**
+<% if (error.lineContent) { %>
+  ```
+  <%- error.lineContent %>
+  ```
+  <%- error.message %>
+<% } else { %>
+  <%- error.message %>
+<% } %>
+<% } %>
+<% if (errors.length > 50) { %>
+... and <%= errors.length - 50 %> more issues.
+<% } %>
+<% } %>
+
+---
+
+# 编码质量检查报告 {#编码质量检查报告}
+
+## 摘要
+- **生成时间:** <%= new Date().getFullYear() %>/<%= String(new Date().getMonth() + 1).padStart(2, '0') %>/<%= String(new Date().getDate()).padStart(2, '0') %> <%= String(new Date().getHours()).padStart(2, '0') %>:<%= String(new Date().getMinutes()).padStart(2, '0') %>:<%= String(new Date().getSeconds()).padStart(2, '0') %>
+- **检查目标:** <%= targetPath || process.cwd() %>
+- **问题总数:** <%= summary.totalIssues %>
+- **涉及文件数:** <%= summary.filesInvolved %>
+- **错误数量:** <%= summary.errorCount %>
+- **警告数量:** <%= summary.warningCount %>
+
+<% for (const [file, errors] of Object.entries(errorsByFile)) { %>
+## 文件: <%= file %>
+- **错误数量:** <%= errors.filter(e => e.severity === 2).length %>
+- **警告数量:** <%= errors.filter(e => e.severity === 1).length %>
+
+### 问题详情
+<% if (errors.length > 50) { %>
+⚠️ 该文件问题过多（<%= errors.length %>个）。仅显示前50个问题。
+<% } %>
+<% const displayErrors = errors.slice(0, 50); %>
+<% for (const error of displayErrors) { %>
+- **第<%= error.line %>行, 第<%= error.column %>列**
+<% if (error.lineContent) { %>
+  ```
+  <%- error.lineContent %>
+  ```
+  <%- error.message %>
+<% } else { %>
+  <%- error.message %>
+<% } %>
+<% } %>
+<% if (errors.length > 50) { %>
+... 还有 <%= errors.length - 50 %> 个问题。
+<% } %>
+<% } %>
