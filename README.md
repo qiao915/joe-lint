@@ -1,6 +1,6 @@
 # joe-lint
 
-[中文文档 (Chinese Documentation)](README.CN.md)
+[中文文档 (Chinese Documentation)](https://github.com/qiao915/joe-lint/blob/master/README.CN.md)
 
 A comprehensive front-end code quality control tool that integrates multiple third-party tools, providing a unified command-line interface and report format. It also supports being used as a dependency package in projects.
 
