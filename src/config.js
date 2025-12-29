@@ -54,7 +54,7 @@ const defaultConfig = {
     '.git',
     '*.log',
     'package-lock.json',
-    'yarn.lock'
+    'yarn.lock',
   ],
   
   // 输出配置

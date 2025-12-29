@@ -38,3 +38,5 @@ test-project/
 # 编码规范目录
 编码规范/
 src/编码规范/
+codingStandards/
+src/codingStandards/
