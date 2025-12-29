@@ -73,6 +73,12 @@ const git = simpleGit();
 export async function lint(options = {}) {
   const defaultConfig = getConfig();
   const config = options.config ? mergeConfig(defaultConfig, options.config) : defaultConfig;
+  
+  // 确保命令行选项中的maxFiles能够正确覆盖配置中的值
+  if (options.maxFiles) {
+    config.maxFiles = parseInt(options.maxFiles);
+  }
+  
   const staged = options.staged || false;
   const outputFile = options.outputFile || config.output.file;
   const specifiedFiles = options.files ? (Array.isArray(options.files) ? options.files : [options.files]) : [];
@@ -227,15 +233,17 @@ export async function lint(options = {}) {
   const errors = allResults.filter(result => result.error);
   
   // 生成报告
+  console.log(chalk.blue(`\nGenerating report... / 正在生成报告...`));
+  // 传递目标路径给报告生成函数
+  const targetPath = options.dir 
+    ? (Array.isArray(options.dir) ? options.dir[0] : options.dir)
+    : process.cwd();
+  await renderMarkdownReport(errors, outputFile, targetPath);
+  
   if (errors.length > 0) {
-    console.log(chalk.red(`\nFound ${errors.length} errors, generating report... / 发现 ${errors.length} 个错误，正在生成报告...`));
-    // 传递目标路径给报告生成函数
-    const targetPath = options.dir 
-      ? (Array.isArray(options.dir) ? options.dir[0] : options.dir)
-      : process.cwd();
-    await renderMarkdownReport(errors, outputFile, targetPath);
+    console.log(chalk.red(`\nFound ${errors.length} errors! / 发现 ${errors.length} 个错误！`));
   } else {
-    console.log(chalk.green('\nNo errors found! / 未发现错误！'));
+    console.log(chalk.green(`\nNo errors found! / 未发现错误！`));
   }
   
   return {
@@ -265,17 +273,26 @@ async function getSpecifiedFiles(filesOrDirs, config) {
   }
   
   let allFiles = [];
+  const MAX_FILES = config.maxFiles || 500; // 添加全局文件数量限制
   
   for (const item of filesOrDirs) {
     const resolvedPath = resolve(process.cwd(), item);
     
     if (statSync(resolvedPath).isDirectory()) {
-      // 如果是目录，递归获取所有文件
+      // 如果是目录，递归获取所有文件，但要考虑全局限制
       const dirFiles = getAllFiles(resolvedPath, config);
-      allFiles.push(...dirFiles);
+      // 添加到总列表前检查是否超过限制
+      const remainingSlots = MAX_FILES - allFiles.length;
+      if (remainingSlots <= 0) break;
+      // 只添加不超过剩余限制的文件数量
+      allFiles.push(...dirFiles.slice(0, remainingSlots));
     } else {
-      // 如果是文件，直接添加
-      allFiles.push(resolvedPath);
+      // 如果是文件，直接添加，但要考虑全局限制
+      if (allFiles.length < MAX_FILES) {
+        allFiles.push(resolvedPath);
+      } else {
+        break;
+      }
     }
   }
   

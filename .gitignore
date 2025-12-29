@@ -45,6 +45,9 @@ coverage/
 # Lint reports
 joe-lint-result.md
 *.lint.md
-
 test/
 joe-lint-result-*.md
+
+# Coding standards directories
+编码规范/
+src/编码规范/

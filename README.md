@@ -1,6 +1,6 @@
 # joe-lint
 
-[中文版本 (Chinese Version)](README.CN.md)
+[中文文档 (Chinese Documentation)](README.CN.md)
 
 A comprehensive front-end code quality control tool that integrates multiple third-party tools, providing a unified command-line interface and report format. It also supports being used as a dependency package in projects.
 
@@ -47,7 +47,7 @@ joe-lint /path/to/your/project
 ```
 
 ### Notes
-- The maximum number of files that can be checked in a single scan is **500** to avoid memory issues.
+- The default maximum number of files that can be checked in a single scan is **500** to avoid memory issues. You can customize this limit with the `--max-files` option.
 
 ### Framework Integration
 
@@ -151,6 +151,7 @@ joe-lint --setup
 | `--dir <paths...>` | `-d` | Check specified folders or files |
 | `--setup` | | Configure Git hooks |
 | `--commitlint <file>` | | Check commit message format |
+| `--max-files <number>` | | Customize maximum number of files to check |
 | `--version` | `-v` | Show current version |
 | `--help` | `-h` | Show help information |
 
@@ -162,14 +163,12 @@ joe-lint provides a default configuration file `.joelintrc.json` which includes 
 
 ### Create Custom Configuration
 
-Create a `.joelintrc.json` file in the project root directory with the following example:
+Create a `.joelintrc.json` file in the project root directory. You can refer to the detailed configuration structure below:
 
 ```json
 {
-  "fileTypes": [
-    "html", "css", "js", "ts", "vue", "react", "markdown", "ejs",
-    "jsx", "tsx", "less", "scss"
-  ],
+  "fileTypes": ["js", "ts", "vue", "react", "css", "less", "scss", "html", "ejs"],
+  "maxFiles": 500,
   "linters": {
     "js": {
       "enabled": true,
@@ -178,14 +177,35 @@ Create a `.joelintrc.json` file in the project root directory with the following
         "semi": ["error", "always"]
       }
     },
-    "css": {
+    "ts": {
       "enabled": true,
       "rules": {
-        "indentation": 2
+        "no-unused-vars": "error"
       }
-    },
-    "ts": {
-      "enabled": false
+      /* Other custom rules configuration */
+    }
+  },
+  "commitlint": {
+    "enabled": true,
+    "config": {
+      "extends": ["@commitlint/config-conventional"]
+    }
+  },
+  "ignore": [
+    "node_modules",
+    "dist",
+    "build",
+    ".git"
+  ],
+  "output": {
+    "format": "markdown",
+    "file": "joe-lint-result.md"
+  },
+  "gitHook": {
+    "enabled": true,
+    "hooks": {
+      "pre-commit": "lint",
+      "commit-msg": "commitlint"
     }
   }
 }
@@ -193,10 +213,19 @@ Create a `.joelintrc.json` file in the project root directory with the following
 
 ### Configuration Options
 
-- **fileTypes**: List of file types to check (supports: html, css, js, ts, vue, react, markdown, ejs, jsx, tsx, less, scss)
-- **linters**: Configuration for each file type's checker
-  - **enabled**: Whether to enable this checker (true/false)
-  - **rules**: Custom rules for this file type (only mergeable configuration)
+joe-lint supports the following configuration options:
+
+| Option | Description |
+|--------|-------------|
+| **fileTypes** | List of file types to check (supports: js, javascript, ts, typescript, jsx, tsx, css, less, scss, html, vue, ejs) |
+| **maxFiles** | Maximum number of files to check in a single scan (default: 500) |
+| **linters** | Configuration for each file type's checker |
+| **enabled** | Whether to enable this checker (true/false) |
+| **rules** | Custom rules for this file type (rules will be merged with built-in default rules) |
+| **commitlint** | Commit message format checking configuration |
+| **ignore** | List of paths or patterns to ignore during linting |
+| **output** | Output format and file configuration |
+| **gitHook** | Git hook configuration |
 
 ### Built-in Default Rules
 

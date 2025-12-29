@@ -5,7 +5,8 @@
   "main": "index.js",
   "bin": {
     "joe-lint": "bin/cli.js",
-    "joelint": "bin/cli.js"
+    "joelint": "bin/cli.js",
+    "jlint": "bin/cli.js"
   },
   "type": "module",
   "scripts": {

@@ -21,6 +21,9 @@ const defaultConfig = {
     'js', 'javascript', 'ts', 'typescript', 'jsx', 'tsx', 'css', 'less', 'scss', 'html', 'vue', 'ejs'
   ],
   
+  // 最大检查文件数量，避免内存问题
+  maxFiles: 500,
+  
   // 检查器配置
   linters: {
     js: jsRules,
@@ -107,11 +110,17 @@ export function getConfig(configPath = null) {
 export function mergeConfig(defaultConfig, userConfig) {
   const merged = { ...defaultConfig };
   
-  // 只合并fileTypes和linters配置项
+  // 合并基本配置项
+  if (userConfig.maxFiles && typeof userConfig.maxFiles === 'number') {
+    merged.maxFiles = userConfig.maxFiles;
+  }
+  
+  // 合并fileTypes配置
   if (userConfig.fileTypes && Array.isArray(userConfig.fileTypes)) {
     merged.fileTypes = userConfig.fileTypes;
   }
   
+  // 合并linters配置
   if (userConfig.linters && typeof userConfig.linters === 'object' && userConfig.linters !== null) {
     for (const fileType in userConfig.linters) {
       if (Object.prototype.hasOwnProperty.call(userConfig.linters, fileType)) {

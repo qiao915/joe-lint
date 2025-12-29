@@ -45,7 +45,7 @@ joe-lint /path/to/your/project
 ```
 
 ### 注意事项
-- 单次扫描最多可检查**500**个文件，以避免内存问题。
+- 单次扫描默认最多可检查**500**个文件，以避免内存问题。您可以使用`--max-files`选项自定义此限制。
 
 ### 框架工程集成
 
@@ -149,6 +149,7 @@ joe-lint --setup
 | `--dir <paths...>` | `-d` | 检查指定文件夹或者指定文件 |
 | `--setup` | | 配置Git hooks |
 | `--commitlint <file>` | | 检查commit消息格式 |
+| `--max-files <number>` | | 自定义单次检查的最大文件数量 |
 | `--version` | `-v` | 显示当前版本 |
 | `--help` | `-h` | 显示帮助信息 |
 
@@ -160,14 +161,12 @@ joe-lint 提供了默认的配置文件 `.joelintrc.json`，包含了针对所�
 
 ### 创建自定义配置
 
-在项目根目录创建 `.joelintrc.json` 文件，示例内容如下：
+在项目根目录创建 `.joelintrc.json` 文件，您可以参考以下详细配置结构：
 
 ```json
 {
-  "fileTypes": [
-    "html", "css", "js", "ts", "vue", "react", "markdown", "ejs",
-    "jsx", "tsx", "less", "scss"
-  ],
+  "fileTypes": ["js", "ts", "vue", "react", "css", "less", "scss", "html", "ejs"],
+  "maxFiles": 500,
   "linters": {
     "js": {
       "enabled": true,
@@ -176,14 +175,35 @@ joe-lint 提供了默认的配置文件 `.joelintrc.json`，包含了针对所�
         "semi": ["error", "always"]
       }
     },
-    "css": {
+    "ts": {
       "enabled": true,
       "rules": {
-        "indentation": 2
+        "no-unused-vars": "error"
       }
-    },
-    "ts": {
-      "enabled": false
+      /* 其他自定义规则配置 */
+    }
+  },
+  "commitlint": {
+    "enabled": true,
+    "config": {
+      "extends": ["@commitlint/config-conventional"]
+    }
+  },
+  "ignore": [
+    "node_modules",
+    "dist",
+    "build",
+    ".git"
+  ],
+  "output": {
+    "format": "markdown",
+    "file": "joe-lint-result.md"
+  },
+  "gitHook": {
+    "enabled": true,
+    "hooks": {
+      "pre-commit": "lint",
+      "commit-msg": "commitlint"
     }
   }
 }
@@ -191,10 +211,19 @@ joe-lint 提供了默认的配置文件 `.joelintrc.json`，包含了针对所�
 
 ### 配置选项说明
 
-- **fileTypes**: 要检查的文件类型列表（支持：html, css, js, ts, vue, react, markdown, ejs, jsx, tsx, less, scss）
-- **linters**: 各文件类型的检查器配置
-  - **enabled**: 是否启用该检查器（true/false）
-  - **rules**: 该文件类型的自定义规则（仅可配置的选项）
+joe-lint 支持以下配置选项：
+
+| 选项 | 描述 |
+|------|------|
+| **fileTypes** | 要检查的文件类型列表（支持：js, javascript, ts, typescript, jsx, tsx, css, less, scss, html, vue, ejs） |
+| **maxFiles** | 单次扫描的最大文件数量（默认：500） |
+| **linters** | 各文件类型的检查器配置 |
+| **enabled** | 是否启用该检查器（true/false） |
+| **rules** | 该文件类型的自定义规则（规则将与内置默认规则合并） |
+| **commitlint** | Commit 消息格式检查配置 |
+| **ignore** | 检查过程中忽略的路径或模式列表 |
+| **output** | 输出格式和文件配置 |
+| **gitHook** | Git Hook 配置 |
 
 ### 内置默认规则
 
@@ -752,9 +781,6 @@ scanDirectory();
   unusedFunction();
   ```
   'unusedFunction' is not defined.
-
-
-
 
 ---
 
