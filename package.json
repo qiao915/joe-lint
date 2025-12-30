@@ -1,6 +1,6 @@
 {
   "name": "joe-lint",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A comprehensive front-end coding quality control tool",
   "main": "index.js",
   "bin": {
@@ -21,7 +21,11 @@
     "stylelint",
     "prettier",
     "commitlint",
-    "markdownlint"
+    "markdownlint",
+    "joelint",
+    "jlint",
+    "joe-lint",
+    "joe"
   ],
   "author": "qiao_915@yeah.net",
   "license": "ISC",
